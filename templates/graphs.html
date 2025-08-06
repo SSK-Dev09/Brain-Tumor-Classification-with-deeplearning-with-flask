@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>📊 Graphs - Brain Tumor Detection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Plotly CDN -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f4f4f4, #ddeeff);
+      color: #2c3e50;
+    }
+
+    header {
+      background: linear-gradient(to right, #1e3c72, #2a5298);
+      color: white;
+      padding: 20px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      text-align: center;
+      margin: 0;
+      font-size: 32px;
+      animation: fadeInDown 1s ease;
+    }
+
+    nav {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: #fff;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffeb3b;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 0;
+    }
+
+    h2 {
+      font-size: 26px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    p {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 30px;
+    }
+
+    .chart-container {
+      margin-bottom: 50px;
+      animation: fadeInUp 1s ease;
+    }
+
+    .styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      animation: fadeIn 1s ease;
+    }
+
+    .styled-table th, .styled-table td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .styled-table th {
+      background-color: #2980b9;
+      color: #fff;
+    }
+
+    .styled-table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .styled-table tr:hover {
+      background-color: #d6eaf8;
+    }
+
+    footer {
+      background-color: #2a5298;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 24px; }
+      nav a { display: block; margin: 5px 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1>📊 Prediction Graphs</h1>
+      <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('overview') }}">Overview</a>
+        <a href="{{ url_for('graphs') }}">Graphs</a>
+        <a href="{{ url_for('analysis') }}">Analysis</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container chart-container">
+    <h2>📦 Tumor Type Prediction Count</h2>
+    <p>This bar chart summarizes the frequency of each tumor class prediction made by the model.</p>
+    <div id="tumorChart" style="width: 100%; height: 400px;"></div>
+  </div>
+
+  <div class="container chart-container">
+    <h2>🍩 Proportion of Predictions</h2>
+    <p>This donut chart shows the percentage distribution of tumor types in the uploaded predictions.</p>
+    <div id="donutChart" style="width: 100%; height: 400px;"></div>
+  </div>
+
+  <div class="container chart-container">
+    <h2>📈 Prediction Confidence Trends</h2>
+    <p>This line chart shows the change in model confidence scores over the latest predictions.</p>
+    <div id="lineChart" style="width: 100%; height: 400px;"></div>
+  </div>
+
+  <div class="container">
+    <h2>📝 Recent Predictions</h2>
+    {% if prediction_rows %}
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Filename</th>
+          <th>Predicted Label</th>
+          <th>Confidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in prediction_rows %}
+        <tr>
+          <td>{{ row.filename }}</td>
+          <td>{{ row.predicted_label }}</td>
+          <td>{{ row.confidence }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center;">No prediction data available.</p>
+    {% endif %}
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Brain Tumor Detection System. All rights reserved. | Powered by AI 🧠</p>
+    </div>
+  </footer>
+
+  <!-- JS for Plotly Charts -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const labels = {{ tumor_labels|tojson }};
+      const values = {{ tumor_counts|tojson }};
+      const filenames = {{ prediction_rows|map(attribute='filename')|list|tojson }};
+      const confidences = {{ prediction_rows|map(attribute='confidence')|list|tojson }};
+
+      // Bar Chart
+      Plotly.newPlot('tumorChart', [{
+        x: labels,
+        y: values,
+        type: 'bar',
+        marker: { color: ['#e74c3c', '#3498db', '#f1c40f', '#2ecc71'] }
+      }], {
+        title: 'Tumor Type Prediction Count',
+        xaxis: { title: 'Tumor Type' },
+        yaxis: { title: 'Count' }
+      });
+
+      // Donut Chart
+      Plotly.newPlot('donutChart', [{
+        values: values,
+        labels: labels,
+        type: 'pie',
+        hole: 0.5,
+        marker: {
+          colors: ['#e74c3c', '#2980b9', '#f39c12', '#27ae60']
+        },
+        textinfo: 'label+percent'
+      }], {
+        title: 'Prediction Proportions'
+      });
+
+      // Line Chart
+      Plotly.newPlot('lineChart', [{
+        x: filenames,
+        y: confidences,
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: { color: '#8e44ad' },
+        marker: { size: 8 }
+      }], {
+        title: 'Prediction Confidence Over Time',
+        xaxis: { title: 'Filename', tickangle: -45 },
+        yaxis: { title: 'Confidence Score', range: [0, 1] }
+      });
+    });
+  </script>
+</body>
+</html>

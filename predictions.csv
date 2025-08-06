@@ -1,0 +1,23 @@
+filename,predicted_label,confidence
+Te-me_0010.jpg,Meningioma,77.41%
+Y7.jpg,Meningioma,99.88%
+Y7.jpg,Meningioma,99.88%
+Y8.jpg,Meningioma,69.40%
+Te-me_0010.jpg,Glioma,40.43%
+Te-me_0010.jpg,Glioma,40.43%
+Te-me_0015.jpg,Glioma,66.08%
+Te-gl_0016.jpg,Pituitary,70.63%
+Te-no_0016.jpg,No Tumor,91.05%
+Te-pi_0018.jpg,Meningioma,43.99%
+Te-pi_0012.jpg,Ptuitary,63.14%
+Te-me_0010.jpg,Meningioma,40.43%
+Te-me_0010.jpg,Meningioma,40.43%
+Te-no_0015.jpg,Meningioma,45.78%
+Te-no_0016.jpg,No Tumor,91.05%
+Te-pi_0016.jpg,Ptuitary,55.25%
+Te-me_0010.jpg,Meningioma,40.43%
+Te-me_0010.jpg,Meningioma,40.43%
+Te-me_0010.jpg,Meningioma,40.43%
+Te-no_0011.jpg,Meningioma,67.54%
+Te-no_0017.jpg,Ptuitary,66.52%
+Te-no_0014.jpg,No Tumor,97.90%

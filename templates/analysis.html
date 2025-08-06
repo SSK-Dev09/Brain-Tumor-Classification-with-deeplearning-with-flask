@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>⚙️ Analysis - Brain Tumor Detection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #eef2f3, #8e9eab);
+      color: #2c3e50;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(to right, #283e51, #485563);
+      color: #fff;
+      padding: 25px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    header h1 {
+      text-align: center;
+      font-size: 32px;
+      animation: slideDown 1s ease-in-out;
+    }
+
+    nav {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #00eaff;
+    }
+
+    section {
+      padding: 60px 0 40px;
+      animation: fadeInUp 1s ease;
+    }
+
+    section.alt-section {
+      background: #ffffff;
+    }
+
+    h2 {
+      color: #1a5276;
+      text-align: center;
+      font-size: 30px;
+      margin-bottom: 25px;
+    }
+
+    p, ul {
+      font-size: 17px;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 0 auto 20px;
+      color: #2c3e50;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      margin-bottom: 14px;
+      position: relative;
+      padding-left: 32px;
+      font-weight: 500;
+    }
+
+    ul li::before {
+      content: "✔️";
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 18px;
+    }
+
+    footer {
+      background: #283e51;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 50px;
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .infobox {
+      background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
+      border-left: 6px solid #00acc1;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+      max-width: 900px;
+      margin: 0 auto 30px;
+      transition: transform 0.3s ease;
+    }
+
+    .infobox:hover {
+      transform: scale(1.02);
+    }
+
+    .highlight {
+      background: #ffeaa7;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      h2 { font-size: 24px; }
+      nav a { margin: 5px 10px; display: inline-block; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1>⚙️ System Analysis</h1>
+      <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('overview') }}">Overview</a>
+        <a href="{{ url_for('graphs') }}">Graphs</a>
+        <a href="{{ url_for('analysis') }}">Analysis</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+      <h2>📈 Model Performance Overview</h2>
+      <div class="infobox">
+        <p>
+          Our deep learning model has been trained on a robust dataset of MRI scans, consisting of four categories:
+          <span class="highlight">Glioma</span>, <span class="highlight">Meningioma</span>,
+          <span class="highlight">Pituitary</span>, and <span class="highlight">No Tumor</span>. We employ
+          <strong>transfer learning</strong> from the VGG16 architecture for better generalization.
+        </p>
+        <ul>
+          <li>🎯 Accuracy: <strong>94% – 97%</strong> on validation</li>
+          <li>📋 Precision & Recall tailored for medical safety</li>
+          <li>🔄 Data Augmentation to prevent bias & overfitting</li>
+          <li>⚙️ Engineered with CNN & Batch Normalization</li>
+          <li>📉 Minimal overfitting due to dropout & early stopping</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt-section">
+    <div class="container">
+      <h2>🧠 Medical Interpretation Guide</h2>
+      <div class="infobox">
+        <ul>
+          <li>🧾 <strong>No Tumor</strong> prediction indicates normal brain MRI scan.</li>
+          <li>⚠️ <strong>Glioma</strong> or <strong>Meningioma</strong> cases need radiologist confirmation.</li>
+          <li>📊 Confidence Score ≥ <strong>90%</strong> reflects strong model agreement.</li>
+          <li>👩‍⚕️ Model supports diagnosis — <em>not a replacement for professional consultation</em>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>📌 How the Model Thinks</h2>
+      <div class="infobox">
+        <p>
+          Our model analyzes MRI scans by detecting texture, pixel intensity, and regional anomalies using deep CNN layers.
+          It forms decisions using non-linear activations, pooling strategies, and spatial awareness.
+        </p>
+        <p>
+          🔬 With <strong>Grad-CAM</strong> integrated, you can visualize the activated regions in MRI scans,
+          enhancing trust and interpretability in diagnosis.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Brain Tumor Detection System | Built by <strong>SSK</strong>. Empowering AI for Health 💡</p>
+    </div>
+  </footer>
+</body>
+</html>

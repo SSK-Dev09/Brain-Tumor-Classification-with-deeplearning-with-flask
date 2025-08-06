@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Brain Tumor Detection - Home</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style1.css') }}"
+    />
+    <script>
+      // Theme toggle logic
+      document.addEventListener("DOMContentLoaded", () => {
+        const button = document.getElementById("theme-toggle");
+        const userPrefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        if (userPrefersDark) {
+          document.body.classList.add("dark");
+        }
+
+        button.addEventListener("click", () => {
+          document.body.classList.toggle("dark");
+        });
+      });
+      document.addEventListener("DOMContentLoaded", () => {
+        const buttons = document.querySelectorAll(".tab-btn");
+        const contents = document.querySelectorAll(".tab-content");
+
+        buttons.forEach((button) => {
+          button.addEventListener("click", () => {
+            buttons.forEach((btn) => btn.classList.remove("active"));
+            contents.forEach((tab) => tab.classList.remove("active"));
+
+            button.classList.add("active");
+            const activeTab = document.getElementById(button.dataset.tab);
+            activeTab.classList.add("active");
+          });
+        });
+      });
+      document.addEventListener("DOMContentLoaded", () => {
+        const buttons = document.querySelectorAll(".tab-btn");
+        const contents = document.querySelectorAll(".tab-content");
+
+        buttons.forEach((button) => {
+          button.addEventListener("click", () => {
+            buttons.forEach((btn) => btn.classList.remove("active"));
+            contents.forEach((tab) => tab.classList.remove("active"));
+
+            button.classList.add("active");
+            document.getElementById(button.dataset.tab).classList.add("active");
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Brain Tumor Detection</h1>
+        <nav>
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="#Analyze">Analyze</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+          <a href="{{ url_for('login') }}">Log-Out</a>
+          <button id="theme-toggle" class="theme-toggle">Dark/Light</button>
+        </nav>
+      </div>
+    </header>
+
+    <section id="about" class="section about-section">
+      <div class="container">
+        <h2>🧠 About Brain Tumor Detection System</h2>
+        <p class="intro">
+          This AI-powered system uses advanced deep learning techniques to
+          detect and classify brain tumors from MRI scans. It empowers
+          radiologists and healthcare providers with fast, accurate, and
+          accessible tools to assist in early diagnosis and treatment planning.
+        </p>
+
+        <div class="tabs">
+          <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="glioma">🧬 Glioma</button>
+            <button class="tab-btn" data-tab="meningioma">🧠 Meningioma</button>
+            <button class="tab-btn" data-tab="pituitary">🧪 Pituitary</button>
+            <button class="tab-btn" data-tab="notumor">✅ No Tumor</button>
+          </div>
+
+          <div class="tab-content active" id="glioma">
+            <div class="card glioma">
+              <h3>Glioma Tumors</h3>
+              <p>
+                Gliomas are fast-growing tumors that arise from glial cells in
+                the brain and spinal cord. They are usually malignant and
+                require rapid intervention through surgery, chemotherapy, or
+                radiation therapy.
+              </p>
+              <ul>
+                <li>⚡ High-grade and low-grade variations</li>
+                <li>📍 Often found in cerebral hemispheres</li>
+                <li>📈 Aggressive in nature, needs fast treatment</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tab-content" id="meningioma">
+            <div class="card meningioma">
+              <h3>Meningioma Tumors</h3>
+              <p>
+                Meningiomas originate in the meninges — the membranes that
+                surround the brain and spinal cord. Though usually benign, they
+                can grow and cause pressure on nearby brain tissue.
+              </p>
+              <ul>
+                <li>🩺 Most common type of brain tumor in adults</li>
+                <li>😌 Usually slow-growing and non-cancerous</li>
+                <li>🔍 Detected via contrast-enhanced MRI</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tab-content" id="pituitary">
+            <div class="card pituitary">
+              <h3>Pituitary Tumors</h3>
+              <p>
+                Located at the base of the brain, pituitary tumors affect
+                hormone regulation. Most are benign adenomas and can be treated
+                with medication, surgery, or radiation.
+              </p>
+              <ul>
+                <li>🔁 Impacts hormonal balance and vision</li>
+                <li>🧬 Often discovered due to endocrine symptoms</li>
+                <li>💊 Treatable through minimally invasive techniques</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tab-content" id="notumor">
+            <div class="card notumor">
+              <h3>No Tumor Detected</h3>
+              <p>
+                MRI scans without any abnormal findings are categorized as “No
+                Tumor”. Identifying healthy scans is crucial to prevent
+                unnecessary intervention and reduce patient anxiety.
+              </p>
+              <ul>
+                <li>📁 Confirms normal brain structure</li>
+                <li>🧭 Helps in comparative studies</li>
+                <li>📊 Assists in building balanced datasets</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="analyze" class="section alt-section">
+      <div class="container">
+        <h2>Analyze Your MRI</h2>
+        <p>Click below to upload and analyze an MRI scan.</p>
+        <a href="{{ url_for('index') }}" class="btn">Start Analysis</a>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container">
+        <h2>Contact Us</h2>
+        {% if success %}
+        <p class="success">{{ success }}</p>
+        {% endif %}
+        <form method="POST" action="{{ url_for('home') }}">
+          <input type="text" name="name" placeholder="Your Name" required />
+          <input type="email" name="email" placeholder="Your Email" required />
+          <textarea
+            name="message"
+            placeholder="Your Message"
+            rows="5"
+            required
+          ></textarea>
+          <button type="submit" class="btn">Send Message</button>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>
+          &copy; 2025 Brain Tumor Detection System. All rights reserved. For SSK
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

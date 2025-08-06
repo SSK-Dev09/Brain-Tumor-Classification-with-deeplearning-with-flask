@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brain Tumor Detection - Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}" />
+  <style>
+    .doctor-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.3s ease;
+    }
+
+    .doctor-btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(to right, #0072ff, #00c6ff);
+    }
+
+    .tab-content .card {
+      padding: 20px;
+      background: #f4f9ff;
+      border-radius: 10px;
+      margin-top: 20px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .tab-buttons {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      background: #0072ff;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .tab-btn.active {
+      background: #00c6ff;
+      color: #000;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .btn {
+      background: #28a745;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #218838;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const button = document.getElementById("theme-toggle");
+      const userPrefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (userPrefersDark) document.body.classList.add("dark");
+
+      button.addEventListener("click", () => document.body.classList.toggle("dark"));
+
+      const buttons = document.querySelectorAll(".tab-btn");
+      const contents = document.querySelectorAll(".tab-content");
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          buttons.forEach((b) => b.classList.remove("active"));
+          contents.forEach((c) => c.classList.remove("active"));
+          btn.classList.add("active");
+          document.getElementById(btn.dataset.tab).classList.add("active");
+        });
+      });
+    });
+
+    function findDoctorNearby(query) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const gmapUrl = `https://www.google.com/maps/search/${encodeURIComponent(query)}+near+${lat},${lng}`;
+            window.open(gmapUrl, '_blank');
+          },
+          error => {
+            alert("Location not available. Redirecting to general Google Maps search.");
+            window.open(`https://www.google.com/maps/search/${encodeURIComponent(query)}+specialist+near+me`, '_blank');
+          }
+        );
+      } else {
+        alert("Geolocation not supported by browser.");
+        window.open(`https://www.google.com/maps/search/${encodeURIComponent(query)}+specialist+near+me`, '_blank');
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1>Brain Tumor Detection</h1>
+      <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="#Analyze">Analyze</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="{{ url_for('overview') }}">📘 Overview</a>
+        <a href="{{ url_for('graphs') }}">📊 Graphs</a>
+        <a href="{{ url_for('analysis') }}">⚙️ Analysis</a>
+        <a href="{{ url_for('login') }}">Log-Out</a>
+        <button id="theme-toggle" class="theme-toggle">Dark/Light</button>
+      </nav>
+    </div>
+  </header>
+
+  <section id="about" class="section about-section">
+    <div class="container">
+      <h2>🧠 About Brain Tumor Detection System</h2>
+      <p class="intro">
+        This AI-powered system uses advanced deep learning techniques to
+        detect and classify brain tumors from MRI scans. It empowers
+        radiologists and healthcare providers with fast, accurate, and
+        accessible tools for early diagnosis and treatment planning.
+      </p>
+
+      <div class="tabs">
+        <div class="tab-buttons">
+          <button class="tab-btn active" data-tab="glioma">🧬 Glioma</button>
+          <button class="tab-btn" data-tab="meningioma">🧠 Meningioma</button>
+          <button class="tab-btn" data-tab="pituitary">🧪 Pituitary</button>
+          <button class="tab-btn" data-tab="notumor">✅ No Tumor</button>
+        </div>
+
+        <div class="tab-content active" id="glioma">
+          <div class="card glioma">
+            <h3>Glioma Tumors</h3>
+            <p>Gliomas are fast-growing tumors that arise from glial cells. They are often malignant and require early treatment.</p>
+            <ul>
+              <li>⚡ High-grade and low-grade types</li>
+              <li>📍 Found in cerebral hemispheres</li>
+              <li>📈 Aggressive & fast-spreading</li>
+            </ul>
+            <button class="doctor-btn" onclick="findDoctorNearby('glioma specialist')">Find Glioma Specialist Nearby</button>
+          </div>
+        </div>
+
+        <div class="tab-content" id="meningioma">
+          <div class="card meningioma">
+            <h3>Meningioma Tumors</h3>
+            <p>Meningiomas arise from the meninges and are usually benign but can press on brain tissue.</p>
+            <ul>
+              <li>🩺 Most common adult brain tumor</li>
+              <li>😌 Often slow-growing</li>
+              <li>🔍 Easily detected via MRI</li>
+            </ul>
+            <button class="doctor-btn" onclick="findDoctorNearby('meningioma specialist')">Find Meningioma Specialist Nearby</button>
+          </div>
+        </div>
+
+        <div class="tab-content" id="pituitary">
+          <div class="card pituitary">
+            <h3>Pituitary Tumors</h3>
+            <p>Pituitary tumors affect hormones and are mostly noncancerous. They respond well to treatment.</p>
+            <ul>
+              <li>🔁 Affects hormones, vision</li>
+              <li>🧬 Discovered via symptoms</li>
+              <li>💊 Treatable via surgery/meds</li>
+            </ul>
+            <button class="doctor-btn" onclick="findDoctorNearby('pituitary tumor specialist')">Find Pituitary Specialist Nearby</button>
+          </div>
+        </div>
+
+        <div class="tab-content" id="notumor">
+          <div class="card notumor">
+            <h3>No Tumor Detected</h3>
+            <p>“No Tumor” indicates a normal scan. It’s essential for medical reassurance and dataset balance.</p>
+            <ul>
+              <li>📁 Confirms healthy brain scan</li>
+              <li>🧭 Used in baseline studies</li>
+              <li>📊 Validates negative cases</li>
+            </ul>
+            <button class="doctor-btn" onclick="findDoctorNearby('neurologist')">Consult Neurologist Nearby</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="analyze" class="section alt-section">
+    <div class="container">
+      <h2>🧪 Analyze Your MRI</h2>
+      <p>Upload your MRI scan to get predictions powered by AI.</p>
+      <a href="{{ url_for('index') }}" class="btn">Start Analysis</a>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="container">
+      <h2>📬 Contact Us</h2>
+      {% if success %}
+      <p class="success">{{ success }}</p>
+      {% endif %}
+      <form method="POST" action="{{ url_for('home') }}">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+        <button type="submit" class="btn">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Brain Tumor Detection System. All rights reserved. | Built by SSK</p>
+    </div>
+  </footer>
+</body>
+</html>
